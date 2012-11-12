@@ -1,0 +1,189 @@
+Terminals unused in grammar
+
+   DASH
+   ADD
+   SUB
+   MUL
+
+
+Grammar
+
+    0 $accept: command $end
+
+    1 command: CLEAR
+    2        | ID EQUAL object
+
+    3 object: matrix
+
+    4 matrix: LBR rowList RBR
+
+    5 rowList: numList
+    6        | numList SEMICOLON rowList
+
+    7 numList: NUM
+    8        | NUM numList
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+error (256)
+CLEAR (258) 1
+EQUAL (259) 2
+SEMICOLON (260) 6
+LBR (261) 4
+RBR (262) 4
+DASH (263)
+ADD (264)
+SUB (265)
+MUL (266)
+ID (267) 2
+NUM (268) 7 8
+
+
+Nonterminals, with rules where they appear
+
+$accept (14)
+    on left: 0
+command (15)
+    on left: 1 2, on right: 0
+object (16)
+    on left: 3, on right: 2
+matrix (17)
+    on left: 4, on right: 3
+rowList (18)
+    on left: 5 6, on right: 4 6
+numList (19)
+    on left: 7 8, on right: 5 6 8
+
+
+state 0
+
+    0 $accept: . command $end
+
+    CLEAR  shift, and go to state 1
+    ID     shift, and go to state 2
+
+    command  go to state 3
+
+
+state 1
+
+    1 command: CLEAR .
+
+    $default  reduce using rule 1 (command)
+
+
+state 2
+
+    2 command: ID . EQUAL object
+
+    EQUAL  shift, and go to state 4
+
+
+state 3
+
+    0 $accept: command . $end
+
+    $end  shift, and go to state 5
+
+
+state 4
+
+    2 command: ID EQUAL . object
+
+    LBR  shift, and go to state 6
+
+    object  go to state 7
+    matrix  go to state 8
+
+
+state 5
+
+    0 $accept: command $end .
+
+    $default  accept
+
+
+state 6
+
+    4 matrix: LBR . rowList RBR
+
+    NUM  shift, and go to state 9
+
+    rowList  go to state 10
+    numList  go to state 11
+
+
+state 7
+
+    2 command: ID EQUAL object .
+
+    $default  reduce using rule 2 (command)
+
+
+state 8
+
+    3 object: matrix .
+
+    $default  reduce using rule 3 (object)
+
+
+state 9
+
+    7 numList: NUM .
+    8        | NUM . numList
+
+    NUM  shift, and go to state 9
+
+    $default  reduce using rule 7 (numList)
+
+    numList  go to state 12
+
+
+state 10
+
+    4 matrix: LBR rowList . RBR
+
+    RBR  shift, and go to state 13
+
+
+state 11
+
+    5 rowList: numList .
+    6        | numList . SEMICOLON rowList
+
+    SEMICOLON  shift, and go to state 14
+
+    $default  reduce using rule 5 (rowList)
+
+
+state 12
+
+    8 numList: NUM numList .
+
+    $default  reduce using rule 8 (numList)
+
+
+state 13
+
+    4 matrix: LBR rowList RBR .
+
+    $default  reduce using rule 4 (matrix)
+
+
+state 14
+
+    6 rowList: numList SEMICOLON . rowList
+
+    NUM  shift, and go to state 9
+
+    rowList  go to state 15
+    numList  go to state 11
+
+
+state 15
+
+    6 rowList: numList SEMICOLON rowList .
+
+    $default  reduce using rule 6 (rowList)
